@@ -1,0 +1,38 @@
+#!/bin/bash
+
+output_dir="$1"
+
+periods=(
+	"2016_preTS2"
+	"2016_postTS2"
+	"2017_preTS2"
+	"2017_postTS2"
+	"2018"
+)
+
+#----------------------------------------------------------------------------------------------------
+
+if [ -d "$output_dir" ]
+then
+	echo "ERROR: directory $output_dir already exists."
+	exit 1
+fi
+
+echo "* $output_dir"
+
+mkdir -p "$output_dir"
+
+cp "base.py" "$output_dir"
+
+for period in ${periods[*]}
+do
+	cp "${period}_cfg.py" "$output_dir"
+done
+
+cd "$output_dir"
+
+for period in ${periods[*]}
+do
+	cmsRun "${period}_cfg.py" &> "${period}.log" &
+	#cmsRun --jobreport "${period}_JobReport.xml" "${period}_cfg.py" &> "${period}.log" &
+done
