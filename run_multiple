@@ -1,7 +1,5 @@
 #!/bin/bash
 
-output_dir="$1"
-
 periods=(
 	"2016_preTS2"
 	"2016_postTS2"
@@ -12,10 +10,26 @@ periods=(
 
 #----------------------------------------------------------------------------------------------------
 
+function PrintUsage()
+{
+	echo "USAGE: run_multiple <output dir>"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+output_dir="$1"
+
+if [ -z "$output_dir" ]
+then
+	echo "ERROR: output dir not set"
+	PrintUsage
+	exit 1
+fi
+
 if [ -d "$output_dir" ]
 then
 	echo "ERROR: directory $output_dir already exists."
-	exit 1
+	exit 2
 fi
 
 echo "* $output_dir"
