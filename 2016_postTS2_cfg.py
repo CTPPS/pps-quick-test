@@ -7,7 +7,7 @@ from base import *
 SetDefaults(process)
 
 #process.source.fileNames = cms.untracked.vstring("/store/data/Run2016H/ZeroBias/RAW/v1/000/283/453/00000/3204EE5B-C298-E611-BC39-02163E01448F.root")
-process.source.fileNames = cms.untracked.vstring("root://eostotem.cern.ch//eos/totem/user/j/jkaspar/3204EE5B-C298-E611-BC39-02163E01448F.root")
+process.source.fileNames = cms.untracked.vstring("root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/3204EE5B-C298-E611-BC39-02163E01448F.root")
 
 process.ctppsProtonReconstructionPlotter.rpId_45_F = 3
 process.ctppsProtonReconstructionPlotter.rpId_45_N = 2
