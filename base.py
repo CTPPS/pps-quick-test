@@ -36,8 +36,8 @@ def SetDefaults(process):
   # declare global tag
   process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
   from Configuration.AlCa.GlobalTag import GlobalTag
-  #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_2017_2018_Candidate_2019_06_21_14_08_20")
-  process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v11")
+  process.GlobalTag = GlobalTag(process.GlobalTag, "110X_dataRun2_v3")
+  #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v11")
   #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_testPPS_v1")
   #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v10")
   #process.GlobalTag = GlobalTag(process.GlobalTag, "auto:run2_data")
@@ -137,8 +137,25 @@ def SetDefaults(process):
       outputFile = cms.string("")
   )
 
+  # load DQM framework
+  process.load("DQM.Integration.config.environment_cfi")
+  process.dqmEnv.subSystemFolder = "CTPPS"
+  process.dqmEnv.eventInfoFolder = "EventInfo"
+  process.dqmSaver.path = ""
+  process.dqmSaver.tag = "CTPPS"
+
+  # CTPPS DQM modules
+  process.load("DQM.CTPPS.ctppsDQM_cff")
+
+  # processing sequences
   process.path = cms.Path(
-    process.ctppsRawToDigi *
-    process.recoCTPPS *
-    process.ctppsProtonReconstructionPlotter
+    process.ctppsRawToDigi
+    * process.recoCTPPS
+    * process.ctppsProtonReconstructionPlotter
+    * process.ctppsDQM
+  )
+
+  process.end_path = cms.EndPath(
+    process.dqmEnv +
+    process.dqmSaver
   )
