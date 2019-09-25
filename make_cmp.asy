@@ -15,21 +15,29 @@ periods.push("2018"); p_runs.push("320688");
 //periods.push("2018D"); p_runs.push("320822");
 
 string plots[], pl_sectors[], pl_paths[];
-plots.push("$\xi$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_xi");
-plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_x");
-plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_y");
-plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_t");
-plots.push("n timing-RP tracks"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_n_timing_RPs");
+int pl_rebin[];
+plots.push("$\xi$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_xi"); pl_rebin.push(2);
+plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_x"); pl_rebin.push(5);
+plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_y"); pl_rebin.push(5);
+//plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_t"); pl_rebin.push(2);
+plots.push("n timing-RP tracks"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_n_timing_RPs"); pl_rebin.push(1);
 
-plots.push("$\xi$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_xi");
-plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_x");
-plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_y");
-plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_t");
-plots.push("n timing-RP tracks"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_n_timing_RPs");
+plots.push("$\xi$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_xi"); pl_rebin.push(2);
+plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_x"); pl_rebin.push(5);
+plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_y"); pl_rebin.push(5);
+//plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_t"); pl_rebin.push(2);
+plots.push("n timing-RP tracks"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_n_timing_RPs"); pl_rebin.push(1);
 
 string dirs[], d_labels[];
 pen d_pens[];
-dirs.push("version_2"); d_pens.push(red); d_labels.push("CMSSW_11_0_0_pre5, 110X_dataRun2_v3");
+
+//dirs.push("version_1"); d_pens.push(red+dashed); d_labels.push("at 36baea99e0, GT 106X_dataRun2_v11, alignment local, optics local");
+//dirs.push("version_2"); d_pens.push(blue); d_labels.push("at 36baea99e0, GT 106X_dataRun2_v11, alignment local, optics from Wagner's PPSOpticalFunctions_2016-2018_v5.db");
+
+dirs.push("version_3"); d_pens.push(blue); d_labels.push("at f2e490a377, GT 110X_dataRun2_v3, alignment local, optics local");
+//dirs.push("version_4"); d_pens.push(red+dashed); d_labels.push("at f2e490a377, GT 110X_dataRun2_v3, alignment local, optics from GT");
+//dirs.push("version_5"); d_pens.push(red+dashed); d_labels.push("at f2e490a377, GT 110X_dataRun2_v5, alignment local, optics local");
+dirs.push("version_6"); d_pens.push(red+dashed); d_labels.push("at 9e9b04c318, GT 110X_dataRun2_v5, alignment local, optics local");
 
 xSizeDef = 8cm;
 ySizeDef = 8cm;
@@ -64,6 +72,8 @@ for (int peri : periods.keys)
 			RootObject hist = RootGetObject(f, pl_paths[pli], error=false);
 			if (!hist.valid)
 				continue;
+
+			hist.vExec("Rebin", pl_rebin[pli]);
 
 			draw(hist, "vl", d_pens[diri]);
 		}
