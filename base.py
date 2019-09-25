@@ -36,7 +36,7 @@ def SetDefaults(process):
   # declare global tag
   process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
   from Configuration.AlCa.GlobalTag import GlobalTag
-  process.GlobalTag = GlobalTag(process.GlobalTag, "110X_dataRun2_v3")
+  process.GlobalTag = GlobalTag(process.GlobalTag, "110X_dataRun2_v5")
   #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v11")
   #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_testPPS_v1")
   #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v10")
