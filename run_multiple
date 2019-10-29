@@ -43,6 +43,7 @@ echo "* $output_dir"
 mkdir -p "$output_dir"
 
 cp "base.py" "$output_dir"
+cp "conditions.py" "$output_dir"
 
 for period in ${periods[*]}
 do
