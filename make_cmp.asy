@@ -20,29 +20,19 @@ plots.push("$\xi$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_x
 plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_x"); pl_rebin.push(5);
 plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_y"); pl_rebin.push(5);
 //plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_t"); pl_rebin.push(2);
-plots.push("n timing-RP tracks"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_n_timing_RPs"); pl_rebin.push(1);
+plots.push("n timing-RP tracks"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_n_contrib_timing_tracks"); pl_rebin.push(1);
 
 plots.push("$\xi$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_xi"); pl_rebin.push(2);
 plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_x"); pl_rebin.push(5);
 plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_y"); pl_rebin.push(5);
 //plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_t"); pl_rebin.push(2);
-plots.push("n timing-RP tracks"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_n_timing_RPs"); pl_rebin.push(1);
+plots.push("n timing-RP tracks"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_n_contrib_timing_tracks"); pl_rebin.push(1);
 
 string dirs[], d_labels[];
 pen d_pens[];
 
-//dirs.push("version_1"); d_pens.push(red+dashed); d_labels.push("at 36baea99e0, GT 106X_dataRun2_v11, alignment local, optics local");
-//dirs.push("version_2"); d_pens.push(blue); d_labels.push("at 36baea99e0, GT 106X_dataRun2_v11, alignment local, optics from Wagner's PPSOpticalFunctions_2016-2018_v5.db");
-
-//dirs.push("version_3"); d_pens.push(blue); d_labels.push("at f2e490a377, GT 110X_dataRun2_v3, alignment local, optics local");
-//dirs.push("version_4"); d_pens.push(red+dashed); d_labels.push("at f2e490a377, GT 110X_dataRun2_v3, alignment local, optics from GT");
-//dirs.push("version_5"); d_pens.push(red+dashed); d_labels.push("at f2e490a377, GT 110X_dataRun2_v5, alignment local, optics local");
-//dirs.push("version_6"); d_pens.push(red+dashed); d_labels.push("at 9e9b04c318, GT 110X_dataRun2_v5, alignment local, optics local");
-dirs.push("version_7"); d_pens.push(blue); d_labels.push("at 4ac6dbca48, GT 110X_dataRun2_v5, alignment local, optics local");
-//dirs.push("version_8"); d_pens.push(red+dashed); d_labels.push("at 4ac6dbca48, GT 110X_dataRun2_v5, alignment local, optics from Wagner's PPSOpticalFunctions_2016-2018_v7.db");
-//dirs.push("version_9"); d_pens.push(red+dashed); d_labels.push("at 69fecefd, GT 110X_dataRun2_v5, CTPPSRPAlignment_real_offline_v5, PPSOpticalFunctions_offline_v5");
-
-dirs.push("version_10"); d_pens.push(red+dashed); d_labels.push("at 94dca488447e8d1fcf483956ac1fbf99471c3359, GT 110X_dataRun2_v5, alignment local, optics local");
+//dirs.push("version_1"); d_pens.push(blue); d_labels.push("at 18c0cc1d171, GT 106X_dataRun2_v26");
+//dirs.push("version_2"); d_pens.push(red+dashed); d_labels.push("at 18c0cc1d171, GT 106X_dataRun2_v26, alignment local");
 
 xSizeDef = 8cm;
 ySizeDef = 8cm;
@@ -51,8 +41,14 @@ ySizeDef = 8cm;
 
 NewPad(false);
 for (int di : dirs.keys)
-	AddToLegend(replace(dirs[di] + ": " + d_labels[di], "_", "\_"), d_pens[di]);
+	//AddToLegend(replace(dirs[di] + ": " + d_labels[di], "_", "\_"), d_pens[di]);
+	AddToLegend(replace(d_labels[di], "_", "\_"), d_pens[di]);
 AttachLegend();
+
+for (int pli : plots.keys)
+{
+	NewPadLabel("sector " + pl_sectors[pli]);
+}
 
 //----------------------------------------------------------------------------------------------------
 
