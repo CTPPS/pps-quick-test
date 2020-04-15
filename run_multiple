@@ -1,29 +1,158 @@
 #!/bin/bash
 
-periods=(
-	"2016_preTS2"
-	"2016_postTS2"
+function RunIfMatch()
+{
+	if [ "$request" == "$era" ]
+	then
+		success="True"
 
-	"2017_preTS2"
-	"2017_postTS2"
+		cp "conditions.py" "$output_dir"
 
-	"2018"
-	#"2018A"
-	#"2018B"
-	#"2018C"
-	#"2018D"
-)
+		cat "template_cfg.py" | sed "\
+				s|\$year|$year|;\
+				s|\$input|$input|;\
+				s|\$rpId_45_F|$rpId_45_F|;\
+				s|\$rpId_45_N|$rpId_45_N|;\
+				s|\$rpId_56_N|$rpId_56_N|;\
+				s|\$rpId_56_F|$rpId_56_F|;\
+				s|\$output|${request}_reco_plots.root|;\
+			" > "$output_dir/${request}_cfg.py"
+
+		cd "$output_dir"
+
+		cmsRun "${request}_cfg.py" &> "${request}.log" &
+
+		cd - &> /dev/null
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function ProcessOne()
+{
+	request="$1"
+
+	success="False"
+
+	#--------------------
+
+	year="2016"
+	rpId_45_F="3"
+	rpId_45_N="2"
+	rpId_56_N="102"
+	rpId_56_F="103"
+
+	era="2016_preTS2"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/EAD70032-8836-E611-8C11-02163E014154.root"
+	RunIfMatch
+
+	era="2016_postTS2"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/3204EE5B-C298-E611-BC39-02163E01448F.root"
+	RunIfMatch
+
+	#--------------------
+
+	year="2017"
+	rpId_45_F="23"
+	rpId_45_N="3"
+	rpId_56_N="103"
+	rpId_56_F="123"
+
+	era="2017_preTS2"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/8ED63519-2282-E711-9073-02163E01A3C6.root"
+	RunIfMatch
+
+	era="2017_postTS2"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/001D08EE-C4B1-E711-B92D-02163E013864.root"
+	RunIfMatch
+
+	era="2017E_low_PU"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/FEC2DE9E-AFA0-E711-98B1-02163E0143E5.root"
+	RunIfMatch
+
+	era="2017H_W_mass"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/FE78107C-90D2-E711-84AB-02163E01A586.root"
+	RunIfMatch
+
+	#--------------------
+
+	year="2018"
+	rpId_45_F="23"
+	rpId_45_N="3"
+	rpId_56_N="103"
+	rpId_56_F="123"
+
+	era="2018"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/601A721D-AD95-E811-B21A-FA163E28A50A.root"
+	RunIfMatch
+
+	era="2018A"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/4E7ABE07-FE4C-E811-9395-FA163EC5FAA0.root"
+	RunIfMatch
+
+	era="2018B"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/4E7E26D5-A368-E811-B205-FA163E0D66CE.root"
+	RunIfMatch
+
+	era="2018C"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/FE1EE87D-FA83-E811-91D5-FA163E4DBEC7.root"
+	RunIfMatch
+
+	era="2018D"; input="root://eoscms.cern.ch//eos/cms/store/group/phys_pps/sw_test_input/D0D06D0E-9897-E811-99C9-FA163EBF0D83.root"
+	RunIfMatch
+
+	#--------------------
+
+	if [ "$success" == "True" ]
+	then
+		echo "    - $request: executed"
+	else
+		echo "    - $request: failed"
+	fi
+}
+
+
+#----------------------------------------------------------------------------------------------------
+# defaults
+
+output_dir=""
+
+periods="std"
+periods_std="2016_preTS2,2016_postTS2,2017_preTS2,2017_postTS2,2018"
+periods_full="2016_preTS2,2016_postTS2,2017_preTS2,2017_postTS2,2018,2018A,2018B,2018C,2018C"
 
 #----------------------------------------------------------------------------------------------------
 
 function PrintUsage()
 {
-	echo "USAGE: run_multiple <output dir>"
+	echo "USAGE: run_multiple <option> <option> ..."
+	echo "OPTIONS:"
+	echo "    -o, -output <dir>       set output directory"
+	echo "    -p, -periods <list>       comma-separated list of periods, special groups: std, full"
 }
 
 #----------------------------------------------------------------------------------------------------
+# parse command line
 
-output_dir="$1"
+while [ -n "$1" ]
+do
+	case "$1" in
+		"-o" | "-output")
+				shift
+				output_dir="$1"
+			;;
+
+		"-p" | "-periods")
+				shift
+				periods="$1"
+			;;
+
+		"-h" | "--help")
+			PrintUsage
+			exit 0
+			;;
+
+		*)
+			echo "ERROR: argument '$1' not understood."
+			PrintUsage
+			exit 1
+	esac
+
+	shift
+done
+
+#----------------------------------------------------------------------------------------------------
+# validate input
 
 if [ -z "$output_dir" ]
 then
@@ -34,26 +163,35 @@ fi
 
 if [ -d "$output_dir" ]
 then
-	echo "ERROR: directory $output_dir already exists."
+	echo "ERROR: directory $output_dir already exists. Do the following to remove it:"
+	echo "    rm -rf \"$output_dir\""
 	exit 2
 fi
 
-echo "* $output_dir"
+#----------------------------------------------------------------------------------------------------
+# expand period-list groups
 
+if [ "$periods" == "std" ]; then periods="$periods_std"; fi
+if [ "$periods" == "full" ]; then periods="$periods_full"; fi
+
+#----------------------------------------------------------------------------------------------------
+
+# make output directory
+echo "* $output_dir"
 mkdir -p "$output_dir"
 
-cp "base.py" "$output_dir"
-cp "conditions.py" "$output_dir"
-
-for period in ${periods[*]}
+# go through periods
+while [ -n "$periods" ]
 do
-	cp "${period}_cfg.py" "$output_dir"
-done
+	p=${periods%%,*}
 
-cd "$output_dir"
+	periods_new=${periods#*,}
+	if [ "$periods_new" == "$periods" ]
+	then
+		periods=""
+	else
+		periods="$periods_new"
+	fi
 
-for period in ${periods[*]}
-do
-	cmsRun "${period}_cfg.py" &> "${period}.log" &
-	#cmsRun --jobreport "${period}_JobReport.xml" "${period}_cfg.py" &> "${period}.log" &
+	ProcessOne "$p"
 done

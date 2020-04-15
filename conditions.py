@@ -48,13 +48,17 @@ def UseAlignmentLocal(process):
   global alignmentDefined
   alignmentDefined = True
 
+  if not hasattr(process, 'esPreferLocalAlignment'):
+    raise ValueError("local alignment chosen, but process.esPreferLocalAlignment not defined")
+
 
 def UseAlignmentGT(process):
   global alignmentDefined
   alignmentDefined = True
 
-  del process.ctppsRPAlignmentCorrectionsDataESSourceXML
-  del process.esPreferLocalAlignment
+  if hasattr(process, 'esPreferLocalAlignment'):
+    del process.ctppsRPAlignmentCorrectionsDataESSourceXML
+    del process.esPreferLocalAlignment
 
 
 def UseAlignmentFile(process, connection, tag):
@@ -110,8 +114,8 @@ def UseOpticsGT(process):
   global opticsDefined
   opticsDefined = True
 
-  del process.ctppsOpticalFunctionsESSource
-  del process.esPreferLocalOptics
+  #del process.ctppsOpticalFunctionsESSource
+  #del process.esPreferLocalOptics
 
 
 def UseOpticsFile(process, connection, tag):
@@ -156,30 +160,12 @@ def UseOpticsDB(process, connection, tag):
 #----------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------
 
-def SetConditions(process):
+def SetDefaultConditions(process):
   # chose global tag
   process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-  #process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_2017_2018_Candidate_2019_12_02_18_57_30")
-  process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v24")
-  #process.GlobalTag = GlobalTag(process.GlobalTag, "auto:run2_data")
+  process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v26")
 
-  # chose LHCInfo
-  UseLHCInfoGT(process)
-  #UseLHCInfoLocal(process)
-  #UseLHCInfoDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "LHCInfoEndFill_prompt_v2")
-
-  # chose alignment
-  #UseAlignmentGT(process)
-  #UseAlignmentLocal(process)
-  #UseAlignmentFile(process, "sqlite_file:/afs/cern.ch/user/c/cmora/public/CTPPSDB/AlignmentSQlite/CTPPSRPRealAlignment_v13Jun19_v1.db", "PPSRPRealAlignment_v13Jun19")
-  UseAlignmentDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "CTPPSRPAlignment_real_offline_v7")
-
-  # chose optics
-  #UseOpticsGT(process)
-  #UseOpticsLocal(process)
-  #UseOpticsFile(process, "sqlite_file:/afs/cern.ch/user/w/wcarvalh/public/CTPPS/optical_functions/PPSOpticalFunctions_2016-2018_v7.db", "PPSOpticalFunctions_test")
-  UseOpticsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSOpticalFunctions_offline_v6")
-
+def CheckConditions():
   # check choices
   if not lhcInfoDefined:
     raise ValueError("LHCInfo not defined")
