@@ -1,8 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
-#process = cms.Process('TEST', eras.Run2_$year)
-process = cms.Process('TEST', eras.Run2_$year, eras.run2_miniAOD_devel)
+process = cms.Process('TEST', eras.Run2_$year)
+#process = cms.Process('TEST', eras.Run2_$year, eras.run2_miniAOD_devel)
 
 from conditions import *
 
@@ -13,8 +13,8 @@ def SetConditions(process):
   #UseLHCInfoDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "LHCInfoEndFill_prompt_v2")
 
   # chose alignment
-  #UseAlignmentGT(process)
-  UseAlignmentLocal(process)
+  UseAlignmentGT(process)
+  #UseAlignmentLocal(process)
   #UseAlignmentFile(process, "sqlite_file:/afs/cern.ch/user/c/cmora/public/CTPPSDB/AlignmentSQlite/CTPPSRPRealAlignment_v13Jun19_v1.db", "PPSRPRealAlignment_v13Jun19")
   #UseAlignmentDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "CTPPSRPAlignment_real_offline_v7")
 
@@ -29,7 +29,7 @@ process.MessageLogger = cms.Service("MessageLogger",
   statistics = cms.untracked.vstring(),
   destinations = cms.untracked.vstring("cout"),
   cout = cms.untracked.PSet(
-      threshold = cms.untracked.string("WARNING")
+    threshold = cms.untracked.string("WARNING")
   )
 )
 
@@ -63,16 +63,19 @@ CheckConditions()
 
 # reconstruction plotter
 process.ctppsProtonReconstructionPlotter = cms.EDAnalyzer("CTPPSProtonReconstructionPlotter",
-    tagTracks = cms.InputTag("ctppsLocalTrackLiteProducer"),
-    tagRecoProtonsSingleRP = cms.InputTag("ctppsProtons", "singleRP"),
-    tagRecoProtonsMultiRP = cms.InputTag("ctppsProtons", "multiRP"),
+  tagTracks = cms.InputTag("ctppsLocalTrackLiteProducer"),
+  tagRecoProtonsSingleRP = cms.InputTag("ctppsProtons", "singleRP"),
+  tagRecoProtonsMultiRP = cms.InputTag("ctppsProtons", "multiRP"),
 
-    rpId_45_F = cms.uint32($rpId_45_F),
-    rpId_45_N = cms.uint32($rpId_45_N),
-    rpId_56_N = cms.uint32($rpId_56_N),
-    rpId_56_F = cms.uint32($rpId_56_F),
+  rpId_45_F = cms.uint32($rpId_45_F),
+  rpId_45_N = cms.uint32($rpId_45_N),
+  rpId_56_N = cms.uint32($rpId_56_N),
+  rpId_56_F = cms.uint32($rpId_56_F),
 
-    outputFile = cms.string("$output")
+  association_cuts_45 = process.ctppsProtons.association_cuts_45,
+  association_cuts_56 = process.ctppsProtons.association_cuts_56,
+
+  outputFile = cms.string("$output")
 )
 
 ## load DQM framework
