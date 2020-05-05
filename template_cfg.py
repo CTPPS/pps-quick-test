@@ -20,8 +20,8 @@ def SetConditions(process):
 
   # chose optics
   #UseOpticsGT(process)
-  UseOpticsLocal(process)
-  #UseOpticsFile(process, "sqlite_file:/afs/cern.ch/user/w/wcarvalh/public/CTPPS/optical_functions/PPSOpticalFunctions_2016-2018_v7.db", "PPSOpticalFunctions_test")
+  #UseOpticsLocal(process)
+  UseOpticsFile(process, "sqlite_file:/afs/cern.ch/user/w/wcarvalh/public/CTPPS/optical_functions/PPSOpticalFunctions_2016-2018_v9.db", "PPSOpticalFunctions_test")
   #UseOpticsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSOpticalFunctions_offline_v6")
 
 # minimum of logs
