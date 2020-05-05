@@ -19,8 +19,8 @@ def SetConditions(process):
   #UseAlignmentDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "CTPPSRPAlignment_real_offline_v7")
 
   # chose optics
-  UseOpticsGT(process)
-  #UseOpticsLocal(process)
+  #UseOpticsGT(process)
+  UseOpticsLocal(process)
   #UseOpticsFile(process, "sqlite_file:/afs/cern.ch/user/w/wcarvalh/public/CTPPS/optical_functions/PPSOpticalFunctions_2016-2018_v7.db", "PPSOpticalFunctions_test")
   #UseOpticsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSOpticalFunctions_offline_v6")
 
@@ -71,6 +71,9 @@ process.ctppsProtonReconstructionPlotter = cms.EDAnalyzer("CTPPSProtonReconstruc
     rpId_45_N = cms.uint32($rpId_45_N),
     rpId_56_N = cms.uint32($rpId_56_N),
     rpId_56_F = cms.uint32($rpId_56_F),
+
+    association_cuts_45 = process.ctppsProtons.association_cuts_45,
+    association_cuts_56 = process.ctppsProtons.association_cuts_56,
 
     outputFile = cms.string("$output")
 )
