@@ -107,9 +107,11 @@ function ProcessOne()
 
 output_dir=""
 
+force="False"
+
 periods="std"
 periods_std="2016_preTS2,2016_postTS2,2017_preTS2,2017_postTS2,2018"
-periods_full="2016_preTS2,2016_postTS2,2017_preTS2,2017_postTS2,2018,2018A,2018B,2018C,2018C"
+periods_full="2016_preTS2,2016_postTS2,2017_preTS2,2017_postTS2,2017E_low_PU,2017H_W_mass,2018,2018A,2018B,2018C,2018D"
 
 #----------------------------------------------------------------------------------------------------
 
@@ -118,7 +120,8 @@ function PrintUsage()
 	echo "USAGE: run_multiple <option> <option> ..."
 	echo "OPTIONS:"
 	echo "    -o, -output <dir>       set output directory"
-	echo "    -p, -periods <list>       comma-separated list of periods, special groups: std, full"
+	echo "    -p, -periods <list>     comma-separated list of periods, special groups: std, full"
+	echo "    -f                      force to overwrite the output directory"
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -135,6 +138,10 @@ do
 		"-p" | "-periods")
 				shift
 				periods="$1"
+			;;
+
+		"-f")
+				force="True"
 			;;
 
 		"-h" | "--help")
@@ -161,7 +168,7 @@ then
 	exit 1
 fi
 
-if [ -d "$output_dir" ]
+if [ -d "$output_dir" -a "$force" != "True" ]
 then
 	echo "ERROR: directory $output_dir already exists. Do the following to remove it:"
 	echo "    rm -rf \"$output_dir\""
