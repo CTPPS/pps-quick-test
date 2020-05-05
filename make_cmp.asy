@@ -24,19 +24,20 @@ plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPP
 plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_y"); pl_rebin.push(5);
 //plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_t"); pl_rebin.push(2);
 plots.push("n timing-RP tracks"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_n_contrib_timing_tracks"); pl_rebin.push(1);
-plots.push("time"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_time"); pl_rebin.push(1);
+plots.push("time"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_time"); pl_rebin.push(2);
 
 plots.push("$\xi$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_xi"); pl_rebin.push(2);
 plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_x"); pl_rebin.push(5);
 plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_y"); pl_rebin.push(5);
 //plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_t"); pl_rebin.push(2);
 plots.push("n timing-RP tracks"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_n_contrib_timing_tracks"); pl_rebin.push(1);
-plots.push("time"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_time"); pl_rebin.push(1);
+plots.push("time"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_time"); pl_rebin.push(2);
 
 string dirs[], d_labels[];
 pen d_pens[];
 
-dirs.push("version_1"); d_pens.push(blue); d_labels.push("at 18c0cc1d171, GT 106X_dataRun2_v26");
+//dirs.push("version_1"); d_pens.push(blue); d_labels.push("at 18c0cc1d171, GT 106X_dataRun2_v26");
+
 //dirs.push("version_2"); d_pens.push(red+dashed); d_labels.push("at 18c0cc1d171, GT 106X_dataRun2_v26, alignment local");
 //dirs.push("version_3"); d_pens.push(red+dashed); d_labels.push("at c8bdd25133c, GT 106X_dataRun2_v26, alignment local");
 //dirs.push("version_4"); d_pens.push(red+dashed); d_labels.push("at 00ecea5b2ac, GT 106X_dataRun2_v26, alignment local");
@@ -49,7 +50,8 @@ dirs.push("version_1"); d_pens.push(blue); d_labels.push("at 18c0cc1d171, GT 106
 //dirs.push("version_8"); d_pens.push(red+dashed); d_labels.push("at bf100e3ff0a, GT 106X_dataRun2_v26, alignment local; devel flag");
 //dirs.push("version_9"); d_pens.push(red+dashed); d_labels.push("at 25debe6ab6b, GT 106X_dataRun2_v26, alignment local; devel flag");
 
-dirs.push("version_10"); d_pens.push(red+dashed); d_labels.push("at 9f831ddc2e7, GT 106X_dataRun2_v26, alignment local; optics local; devel flag");
+dirs.push("version_10"); d_pens.push(blue); d_labels.push("at 9f831ddc2e7, GT 106X_dataRun2_v26, alignment local; optics local; devel flag");
+dirs.push("version_11"); d_pens.push(red+dashed); d_labels.push("at 9f831ddc2e7, GT 106X_dataRun2_v26, alignment local; optics from Wagner's DB file (v9); devel flag");
 
 xSizeDef = 8cm;
 ySizeDef = 8cm;
