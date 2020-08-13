@@ -17,7 +17,7 @@ for opt, arg in options:
     elif opt in ('-s', '--summary'):
         summary = False
     elif opt in ('-i','--info'):
-        print("Usage: histogram_compare.py [-isl] file1 file2 path1 path2 \n -i --info\n\t o show this menu \n -s --summary\n\t to suppress summaries \n -l --limit\n\t to set limit of differences shown")
+        print("Usage: histogram_compare.py [-isl] file1 file2\n -i --info\n\t o show this menu \n -s --summary\n\t to suppress summaries \n -l --limit\n\t to set limit of differences shown")
         exit()
     
 if len(remainder)>1:
@@ -150,16 +150,14 @@ t=True
 tree=cdandcheck(f,"DQMData")
 tree=cdandcheck(tree,tree.GetListOfKeys()[0].GetName())
 tree=cdandcheck(tree,"CTPPS/Run summary")
-#tree=cdandcheck(tree,"TimingDiamond/sector 45/station 220cyl/cyl_hr")
 
 tree2=cdandcheck(f2,"DQMData")
 tree2=cdandcheck(tree2,tree2.GetListOfKeys()[0].GetName())
 tree2=cdandcheck(tree2,"CTPPS/Run summary")
-#tree2=cdandcheck(tree2,"TimingDiamond/sector 45/station 220/nr_hr")
 
-if len(remainder) == 4:
-    tree=cdandcheck(tree,remainder[2])
-    tree2=cdandcheck(tree2,remainder[3])
+#if len(remainder) == 4:
+#    tree=cdandcheck(tree,remainder[2])
+#    tree2=cdandcheck(tree2,remainder[3])
 
 search_root_rec(tree.GetListOfKeys(),tree2.GetListOfKeys(),"/")
 

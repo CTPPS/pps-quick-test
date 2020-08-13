@@ -1,0 +1,28 @@
+#!/bin/bash
+
+version1="$1"
+version2="$2"
+
+function RunOneComparison()
+{
+	local period="$1"
+	local run="$2"
+
+	local file="DQM_V0001_CTPPS_R000$run.root"
+	local dir="."
+
+	echo ""
+	echo "* $period (run $run)"
+
+	./histogram_compare.py "$version1/$file" "$version2/$file"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+echo "COMPARING: $version1 vs $version2"
+
+RunOneComparison "2016_preTS2" "275371"
+RunOneComparison "2016_postTS2" "283453"
+RunOneComparison "2017_preTS2" "301283"
+RunOneComparison "2017_postTS2" "305081"
+RunOneComparison "2018" "320688"
