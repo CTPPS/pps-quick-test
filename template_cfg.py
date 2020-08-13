@@ -19,9 +19,9 @@ def SetConditions(process):
   #UseAlignmentDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "CTPPSRPAlignment_real_offline_v7")
 
   # chose optics
-  #UseOpticsGT(process)
+  UseOpticsGT(process)
   #UseOpticsLocal(process)
-  UseOpticsFile(process, "sqlite_file:/afs/cern.ch/user/w/wcarvalh/public/CTPPS/optical_functions/PPSOpticalFunctions_2016-2018_v9.db", "PPSOpticalFunctions_test")
+  #UseOpticsFile(process, "sqlite_file:/afs/cern.ch/user/w/wcarvalh/public/CTPPS/optical_functions/PPSOpticalFunctions_2016-2018_v9.db", "PPSOpticalFunctions_test")
   #UseOpticsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSOpticalFunctions_offline_v6")
 
 # minimum of logs
@@ -54,7 +54,7 @@ process.load("CalibPPS.ESProducers.ctppsAlignment_cff")
 process.load("EventFilter.CTPPSRawToDigi.ctppsRawToDigi_cff")
 
 # local RP reconstruction chain with standard settings
-process.load("RecoCTPPS.Configuration.recoCTPPS_cff")
+process.load("RecoPPS.Configuration.recoCTPPS_cff")
 
 # define conditions
 SetDefaultConditions(process)
@@ -79,24 +79,25 @@ process.ctppsProtonReconstructionPlotter = cms.EDAnalyzer("CTPPSProtonReconstruc
 )
 
 ## load DQM framework
-#process.load("DQM.Integration.config.environment_cfi")
-#process.dqmEnv.subSystemFolder = "CTPPS"
-#process.dqmEnv.eventInfoFolder = "EventInfo"
-#process.dqmSaver.path = ""
-#process.dqmSaver.tag = "CTPPS"
-#
+process.load("DQM.Integration.config.environment_cfi")
+process.dqmEnv.subSystemFolder = "CTPPS"
+process.dqmEnv.eventInfoFolder = "EventInfo"
+process.dqmSaver.path = ""
+process.dqmSaver.tag = "CTPPS"
+
 ## CTPPS DQM modules
-#process.load("DQM.CTPPS.ctppsDQM_cff")
+process.load("DQM.CTPPS.ctppsDQM_cff")
 
 # processing sequences
 process.path = cms.Path(
   process.ctppsRawToDigi
   * process.recoCTPPS
   * process.ctppsProtonReconstructionPlotter
-  #* process.ctppsDQM
+  * process.ctppsDQMOfflineSource
+  * process.ctppsDQMOfflineHarvest
 )
 
-#process.end_path = cms.EndPath(
-#  process.dqmEnv +
-#  process.dqmSaver
-#)
+process.end_path = cms.EndPath(
+  process.dqmEnv +
+  process.dqmSaver
+)
