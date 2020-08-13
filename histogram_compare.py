@@ -28,8 +28,8 @@ else:
     exit()
 
 def compare_histos1D(h,h2,path):
-    binsh=h.GetXaxis().GetNbins();
-    binsh2=h2.GetXaxis().GetNbins();
+    binsh=h.GetXaxis().GetNbins()
+    binsh2=h2.GetXaxis().GetNbins()
     if binsh!=binsh2:
         print("Histograms have different number of bins, "+str(binsh)+" and "+str(binsh2))
         print(h.GetName(),h2.GetName())
@@ -42,7 +42,7 @@ def compare_histos1D(h,h2,path):
         if h.GetBinContent(i)!=h2.GetBinContent(i):
             returnVal=False
             diff.append(abs((h.GetBinContent(i)-h2.GetBinContent(i))))
-            llimit=llimit+1;
+            llimit=llimit+1
             if(llimit<glimit):
                 print(path+";\t"+h.GetName()+";\tBin("+str(i)+");\t"+str(h.GetBinContent(i))+";\t"+str(h2.GetBinContent(i)))
 
@@ -52,10 +52,10 @@ def compare_histos1D(h,h2,path):
     return returnVal
 
 def compare_histos2D(h,h2,FullPath):
-    binX=h.GetXaxis().GetNbins();
-    binY=h.GetYaxis().GetNbins();
-    binX2=h2.GetXaxis().GetNbins();
-    binY2=h2.GetYaxis().GetNbins();
+    binX=h.GetXaxis().GetNbins()
+    binY=h.GetYaxis().GetNbins()
+    binX2=h2.GetXaxis().GetNbins()
+    binY2=h2.GetYaxis().GetNbins()
 
     if binX!=binX2 or binY!=binY2:
         print("Histograms have different number of bins:")
@@ -72,7 +72,7 @@ def compare_histos2D(h,h2,FullPath):
             if h.GetBinContent(i,j)!=h2.GetBinContent(i,j):
                     returnVal=False
                     diff.append(abs((h.GetBinContent(i,j)-h2.GetBinContent(i,j))))
-                    llimit=llimit+1;
+                    llimit=llimit+1
                     if(llimit<glimit):
                         print(FullPath+";\t"+h.GetName()+";\tBin("+str(i)+","+str(j)+");\t"+str(h.GetBinContent(i,j))+";\t"+str(h2.GetBinContent(i,j)))
     
@@ -186,4 +186,4 @@ elif summary:
     
     print("Numbers of keys in the first and second file: "+str(len(hl))+" "+str(len(hl2)))
 else:
-    print("files are different")
+    print("The root files are different")

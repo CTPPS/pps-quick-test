@@ -14,7 +14,7 @@ function RunOneComparison()
 	echo ""
 	echo "* $period (run $run)"
 
-	./histogram_compare.py "$version1/$file" "$version2/$file"
+	./histogram_compare.py -l 0 "$version1/$file" "$version2/$file"
 }
 
 #----------------------------------------------------------------------------------------------------
