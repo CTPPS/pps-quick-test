@@ -161,11 +161,6 @@ def UseOpticsDB(process, connection, tag):
 #----------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------
 
-def SetDefaultConditions(process):
-  # chose global tag
-  process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-  process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v28")
-
 def CheckConditions():
   # check choices
   if not lhcInfoDefined:

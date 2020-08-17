@@ -7,6 +7,10 @@ process = cms.Process('TEST', eras.Run2_$year)
 from conditions import *
 
 def SetConditions(process):
+  # chose GT
+  process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+  process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v28")
+
   # chose LHCInfo
   UseLHCInfoGT(process)
   #UseLHCInfoLocal(process)
@@ -57,7 +61,6 @@ process.load("EventFilter.CTPPSRawToDigi.ctppsRawToDigi_cff")
 process.load("RecoPPS.Configuration.recoCTPPS_cff")
 
 # define conditions
-SetDefaultConditions(process)
 SetConditions(process)
 CheckConditions()
 
