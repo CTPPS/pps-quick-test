@@ -6,21 +6,21 @@ function RunIfMatch()
 	then
 		success="True"
 
-		cp "conditions.py" "$output_dir"
+		cp "conditions.py" "$dir"
 
-		cat "template_cfg.py" | sed "\
+		cat "templates/reco_cfg.py" | sed "\
 				s|\$year|$year|;\
 				s|\$input|$input|;\
 				s|\$rpId_45_F|$rpId_45_F|;\
 				s|\$rpId_45_N|$rpId_45_N|;\
 				s|\$rpId_56_N|$rpId_56_N|;\
 				s|\$rpId_56_F|$rpId_56_F|;\
-				s|\$output|${request}_reco_plots.root|;\
-			" > "$output_dir/${request}_cfg.py"
+				s|\$output|reco_plots.root|;\
+			" > "$dir/cfg.py"
 
-		cd "$output_dir"
+		cd "$dir"
 
-		cmsRun "${request}_cfg.py" &> "${request}.log" &
+		cmsRun "cfg.py" &> "log" &
 
 		cd - &> /dev/null
 	fi
@@ -28,7 +28,7 @@ function RunIfMatch()
 
 #----------------------------------------------------------------------------------------------------
 
-function ProcessOne()
+function ProcessOneReco()
 {
 	request="$1"
 
@@ -95,12 +95,76 @@ function ProcessOne()
 
 	if [ "$success" == "True" ]
 	then
-		echo "    - $request: executed"
+		echo "        - $request: executed"
 	else
-		echo "    - $request: failed"
+		echo "        - $request: failed"
 	fi
 }
 
+#----------------------------------------------------------------------------------------------------
+
+function ProcessOneDirsim()
+{
+	local period="$1"
+
+	local era=""
+	local config=""
+
+	if [ "$period" == "2016_preTS2" ]; then era="Run2_2016"; config="2016_preTS2"; fi
+	if [ "$period" == "2016_postTS2" ]; then era="Run2_2016"; config="2016_postTS2"; fi
+
+	if [ "$period" == "2017_preTS2" ]; then era="Run2_2017"; config="2017_preTS2"; fi
+	if [ "$period" == "2017_postTS2" ]; then era="Run2_2017"; config="2017_postTS2"; fi
+
+	if [ "$period" == "2018_preTS1" ]; then era="Run2_2018"; config="2018_preTS1"; fi
+	if [ "$period" == "2018_TS1_TS2" ]; then era="Run2_2018"; config="2018_TS1_TS2"; fi
+	if [ "$period" == "2018_postTS2" ]; then era="Run2_2018"; config="2018_postTS2"; fi
+
+	if [ -n "$era" ]
+	then
+		cat "templates/dirsim_cfg.py" | sed "\
+				s|\$ERA|$era|;\
+				s|\$CONFIG|$config|;\
+			" > "$dir/cfg.py"
+
+		cd "$dir"
+
+		cmsRun "cfg.py" &> "log" &
+
+		cd - &> /dev/null
+
+		echo "        - $period executed"
+	else
+		echo "        - $period failed"
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function ProcessOne()
+{
+	local wf="$1"
+	local type="${wf%:*}"
+	local period="${wf#*:}"
+
+	echo "    $type : $period"
+
+	dir="$output_dir/$wf"
+	mkdir -p "$dir"
+
+	case "$type" in
+		"reco")
+				ProcessOneReco "$period"
+			;;
+
+		"dirsim")
+				ProcessOneDirsim "$period"
+			;;
+
+		*)
+			echo "        - unknown type $type"
+	esac
+}
 
 #----------------------------------------------------------------------------------------------------
 # defaults
@@ -109,9 +173,14 @@ output_dir=""
 
 force="False"
 
-periods="std"
-periods_std="2016_preTS2,2016_postTS2,2017_preTS2,2017_postTS2,2018"
-periods_full="2016_preTS2,2016_postTS2,2017_preTS2,2017_postTS2,2017E_low_PU,2017H_W_mass,2018,2018A,2018B,2018C,2018D"
+list="std"
+
+list_reco_std="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2018"
+list_reco_full="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2017E_low_PU,reco:2017H_W_mass,reco:2018,reco:2018A,reco:2018B,reco:2018C,reco:2018D"
+
+list_dirsim_std="dirsim:2016_preTS2,dirsim:2016_postTS2,dirsim:2017_preTS2,dirsim:2017_postTS2,dirsim:2018_preTS1,dirsim:2018_TS1_TS2,dirsim:2018_postTS2"
+
+list_std="$list_reco_std,$list_dirsim_std"
 
 #----------------------------------------------------------------------------------------------------
 
@@ -119,8 +188,10 @@ function PrintUsage()
 {
 	echo "USAGE: run_multiple <option> <option> ..."
 	echo "OPTIONS:"
-	echo "    -o, -output <dir>       set output directory"
-	echo "    -p, -periods <list>     comma-separated list of periods, special groups: std, full"
+	echo "    -o, --output <dir>      set output directory"
+	echo "    -l, --list <list>       comma-separated list of tests, special groups:"
+	echo "                                std"
+	echo "                                full"
 	echo "    -f                      force to overwrite the output directory"
 }
 
@@ -130,14 +201,14 @@ function PrintUsage()
 while [ -n "$1" ]
 do
 	case "$1" in
-		"-o" | "-output")
+		"-o" | "--output")
 				shift
 				output_dir="$1"
 			;;
 
-		"-p" | "-periods")
+		"-l" | "--list")
 				shift
-				periods="$1"
+				list="$1"
 			;;
 
 		"-f")
@@ -178,8 +249,11 @@ fi
 #----------------------------------------------------------------------------------------------------
 # expand period-list groups
 
-if [ "$periods" == "std" ]; then periods="$periods_std"; fi
-if [ "$periods" == "full" ]; then periods="$periods_full"; fi
+if [ "$list" == "reco:std" ]; then list="$list_reco_std"; fi
+if [ "$list" == "dirsim:std" ]; then list="$list_dirsim_std"; fi
+
+if [ "$list" == "std" ]; then list="$list_std"; fi
+if [ "$list" == "full" ]; then list="$list_full"; fi
 
 #----------------------------------------------------------------------------------------------------
 
@@ -187,18 +261,34 @@ if [ "$periods" == "full" ]; then periods="$periods_full"; fi
 echo "* $output_dir"
 mkdir -p "$output_dir"
 
-# go through periods
-while [ -n "$periods" ]
-do
-	p=${periods%%,*}
+# make info file
+(
+	cd ..
+	echo "DATE:"
+	date
 
-	periods_new=${periods#*,}
-	if [ "$periods_new" == "$periods" ]
+	echo ""
+	echo "AT:"
+	git log --oneline|head -n 1
+
+	echo ""
+	echo "STATUS:"
+	git st
+	cd - &> /dev/null
+) > "$output_dir/info"
+
+# go through list
+while [ -n "$list" ]
+do
+	wf=${list%%,*}
+
+	list_new=${list#*,}
+	if [ "$list_new" == "$list" ]
 	then
-		periods=""
+		list=""
 	else
-		periods="$periods_new"
+		list="$list_new"
 	fi
 
-	ProcessOne "$p"
+	ProcessOne "$wf"
 done

@@ -1,6 +1,10 @@
 import root;
 import pad_layout;
 
+include "versions.asy";
+
+string topDir = "../";
+
 string periods[], p_runs[];
 periods.push("2016_preTS2"); p_runs.push("275371");
 periods.push("2016_postTS2"); p_runs.push("283453");
@@ -33,12 +37,6 @@ plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPP
 plots.push("n timing-RP tracks"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_n_contrib_timing_tracks"); pl_rebin.push(1);
 plots.push("time"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_time"); pl_rebin.push(2);
 
-string dirs[], d_labels[];
-pen d_pens[];
-
-dirs.push("version_base"); d_pens.push(blue); d_labels.push("base");
-dirs.push("version_patch"); d_pens.push(red+dashed); d_labels.push("patch");
-
 xSizeDef = 8cm;
 ySizeDef = 8cm;
 
@@ -67,9 +65,9 @@ for (int peri : periods.keys)
 
 		for (int diri : dirs.keys)
 		{
-			string f = dirs[diri] + "/" + periods[peri] + "_reco_plots.root";
+			string f = topDir + dirs[diri] + "/reco:" + periods[peri] + "/reco_plots.root";
 
-			RootObject hist = RootGetObject(f, pl_paths[pli], error=false);
+			RootObject hist = RootGetObject(f, pl_paths[pli], error=true);
 			if (!hist.valid)
 				continue;
 
