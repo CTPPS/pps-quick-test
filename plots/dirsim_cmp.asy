@@ -18,13 +18,14 @@ periods.push("2018_postTS2");
 
 string plots[], pl_labels[], pl_files[], pl_paths[];
 int pl_rebin[];
-plots.push("$x$"); pl_labels.push("RP 3: simu $x$"); pl_files.push("tracks.root"); pl_paths.push("RP 3/h_x"); pl_rebin.push(5);
-plots.push("$y$"); pl_labels.push("RP 3: simu $y$"); pl_files.push("tracks.root"); pl_paths.push("RP 3/h_y"); pl_rebin.push(5);
-plots.push("$\xi$"); pl_labels.push("sector 45: reco $\xi$"); pl_files.push("protons.root"); pl_paths.push("multiRPPlots/arm0/h_xi"); pl_rebin.push(2);
+real pl_x_min[], pl_x_max[];
+plots.push("$x$"); pl_labels.push("RP 3: simu $x$"); pl_files.push("tracks.root"); pl_paths.push("RP 3/h_x"); pl_rebin.push(5); pl_x_min.push(-5); pl_x_max.push(25);
+plots.push("$y$"); pl_labels.push("RP 3: simu $y$"); pl_files.push("tracks.root"); pl_paths.push("RP 3/h_y"); pl_rebin.push(5); pl_x_min.push(-10); pl_x_max.push(10);
+plots.push("$\xi$"); pl_labels.push("sector 45: reco $\xi$"); pl_files.push("protons.root"); pl_paths.push("multiRPPlots/arm0/h_xi"); pl_rebin.push(2); pl_x_min.push(0); pl_x_max.push(0.25);
 
-plots.push("$x$"); pl_labels.push("RP 103: simu $x$"); pl_files.push("tracks.root"); pl_paths.push("RP 103/h_x"); pl_rebin.push(5);
-plots.push("$y$"); pl_labels.push("RP 103: simu $y$"); pl_files.push("tracks.root"); pl_paths.push("RP 103/h_y"); pl_rebin.push(5);
-plots.push("$\xi$"); pl_labels.push("sector 56: reco $\xi$"); pl_files.push("protons.root"); pl_paths.push("multiRPPlots/arm1/h_xi"); pl_rebin.push(2);
+plots.push("$x$"); pl_labels.push("RP 103: simu $x$"); pl_files.push("tracks.root"); pl_paths.push("RP 103/h_x"); pl_rebin.push(5); pl_x_min.push(-5); pl_x_max.push(25);
+plots.push("$y$"); pl_labels.push("RP 103: simu $y$"); pl_files.push("tracks.root"); pl_paths.push("RP 103/h_y"); pl_rebin.push(5); pl_x_min.push(-10); pl_x_max.push(10);
+plots.push("$\xi$"); pl_labels.push("sector 56: reco $\xi$"); pl_files.push("protons.root"); pl_paths.push("multiRPPlots/arm1/h_xi"); pl_rebin.push(2); pl_x_min.push(0); pl_x_max.push(0.25);
 
 xSizeDef = 8cm;
 ySizeDef = 8cm;
@@ -64,6 +65,8 @@ for (int peri : periods.keys)
 
 			draw(hist, "vl", d_pens[diri]);
 		}
+
+		xlimits(pl_x_min[pli], pl_x_max[pli], Crop);
 
 		//AttachLegend(pl_labels[pli]);
 	}
