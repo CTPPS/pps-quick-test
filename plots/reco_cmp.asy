@@ -67,7 +67,7 @@ for (int peri : periods.keys)
 		{
 			string f = topDir + dirs[diri] + "/reco:" + periods[peri] + "/reco_plots.root";
 
-			RootObject hist = RootGetObject(f, pl_paths[pli], error=true);
+			RootObject hist = RootGetObject(f, pl_paths[pli], error=false);
 			if (!hist.valid)
 				continue;
 
