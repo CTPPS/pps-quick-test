@@ -9,7 +9,7 @@ from conditions import *
 def SetConditions(process):
   # chose GT
   process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-  process.GlobalTag = GlobalTag(process.GlobalTag, "106X_dataRun2_v28")
+  process.GlobalTag = GlobalTag(process.GlobalTag, "112X_dataRun2_v6")
 
   # chose LHCInfo
   UseLHCInfoGT(process)
