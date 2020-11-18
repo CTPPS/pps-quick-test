@@ -107,24 +107,29 @@ function ProcessOneDirsim()
 {
 	local period="$1"
 
+	local year=""
 	local era=""
 	local config=""
 
-	if [ "$period" == "2016_preTS2" ]; then era="Run2_2016"; config="2016_preTS2"; fi
-	if [ "$period" == "2016_postTS2" ]; then era="Run2_2016"; config="2016_postTS2"; fi
+	if [ "$period" == "2016" ]; then year="2016"; era="Run2_2016"; periods="config.profile_2016_preTS2,config.profile_2016_postTS2"; fi
+	if [ "$period" == "2016_preTS2" ]; then year="2016"; era="Run2_2016"; periods="config.profile_2016_preTS2"; fi
+	if [ "$period" == "2016_postTS2" ]; then year="2016"; era="Run2_2016"; periods="config.profile_2016_postTS2"; fi
 
-	if [ "$period" == "2017_preTS2" ]; then era="Run2_2017"; config="2017_preTS2"; fi
-	if [ "$period" == "2017_postTS2" ]; then era="Run2_2017"; config="2017_postTS2"; fi
+	if [ "$period" == "2017" ]; then year="2017"; era="Run2_2017"; periods="config.profile_2017_preTS2,config.profile_2017_postTS2"; fi
+	if [ "$period" == "2017_preTS2" ]; then year="2017"; era="Run2_2017"; periods="config.profile_2017_preTS2"; fi
+	if [ "$period" == "2017_postTS2" ]; then year="2017"; era="Run2_2017"; periods="config.profile_2017_postTS2"; fi
 
-	if [ "$period" == "2018_preTS1" ]; then era="Run2_2018"; config="2018_preTS1"; fi
-	if [ "$period" == "2018_TS1_TS2" ]; then era="Run2_2018"; config="2018_TS1_TS2"; fi
-	if [ "$period" == "2018_postTS2" ]; then era="Run2_2018"; config="2018_postTS2"; fi
+	if [ "$period" == "2018" ]; then year="2018"; era="Run2_2018"; periods="config.profile_2018_preTS1,config.profile_2018_TS1_TS2,config.profile_2018_postTS2"; fi
+	if [ "$period" == "2018_preTS1" ]; then year="2018"; era="Run2_2018"; periods="config.profile_2018_preTS1"; fi
+	if [ "$period" == "2018_TS1_TS2" ]; then year="2018"; era="Run2_2018"; periods="config.profile_2018_TS1_TS2"; fi
+	if [ "$period" == "2018_postTS2" ]; then year="2018"; era="Run2_2018"; periods="config.profile_2018_postTS2"; fi
 
 	if [ -n "$era" ]
 	then
 		cat "templates/dirsim_cfg.py" | sed "\
 				s|\$ERA|$era|;\
-				s|\$CONFIG|$config|;\
+				s|\$YEAR|$year|;\
+				s|\$PERIODS|$periods|;\
 			" > "$dir/cfg.py"
 
 		cd "$dir"
@@ -175,12 +180,14 @@ force="False"
 
 list="std"
 
-list_reco_std="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2018"
-list_reco_full="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2017E_low_PU,reco:2017H_W_mass,reco:2018,reco:2018A,reco:2018B,reco:2018C,reco:2018D"
+declare -A lists
 
-list_dirsim_std="dirsim:2016_preTS2,dirsim:2016_postTS2,dirsim:2017_preTS2,dirsim:2017_postTS2,dirsim:2018_preTS1,dirsim:2018_TS1_TS2,dirsim:2018_postTS2"
+lists["reco_std"]="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2018"
+lists["reco_full"]="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2017E_low_PU,reco:2017H_W_mass,reco:2018,reco:2018A,reco:2018B,reco:2018C,reco:2018D"
 
-list_std="$list_reco_std,$list_dirsim_std"
+lists["dirsim_std"]="dirsim:2016,dirsim:2016_preTS2,dirsim:2016_postTS2,dirsim:2017,dirsim:2017_preTS2,dirsim:2017_postTS2,dirsim:2018,dirsim:2018_preTS1,dirsim:2018_TS1_TS2,dirsim:2018_postTS2"
+
+lists["std"]="${lists[reco_std]},${lists[dirsim_std]}"
 
 #----------------------------------------------------------------------------------------------------
 
@@ -190,8 +197,12 @@ function PrintUsage()
 	echo "OPTIONS:"
 	echo "    -o, --output <dir>      set output directory"
 	echo "    -l, --list <list>       comma-separated list of tests, special groups:"
-	echo "                                std"
-	echo "                                full"
+
+	for ln in ${!lists[@]}
+	do
+		echo "                                $ln"
+	done
+
 	echo "    -f                      force to overwrite the output directory"
 }
 
@@ -249,11 +260,15 @@ fi
 #----------------------------------------------------------------------------------------------------
 # expand period-list groups
 
-if [ "$list" == "reco:std" ]; then list="$list_reco_std"; fi
-if [ "$list" == "dirsim:std" ]; then list="$list_dirsim_std"; fi
+for ln in ${!lists[@]}
+do
+	if [ "$list" == "$ln" ]
+	then
+		list="${lists[$ln]}"
 
-if [ "$list" == "std" ]; then list="$list_std"; fi
-if [ "$list" == "full" ]; then list="$list_full"; fi
+		break
+	fi
+done
 
 #----------------------------------------------------------------------------------------------------
 

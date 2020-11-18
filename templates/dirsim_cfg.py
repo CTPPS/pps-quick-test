@@ -4,9 +4,9 @@ from Configuration.Eras.Era_$ERA_cff import *
 process = cms.Process('CTPPSTest', $ERA)
 
 # load config
-import Validation.CTPPS.simu_config.year_$CONFIG_cff as config
-process.load("Validation.CTPPS.simu_config.year_$CONFIG_cff")
-config.SetDefaults(process)
+import Validation.CTPPS.simu_config.year_$YEAR_cff as config
+process.load("Validation.CTPPS.simu_config.year_$YEAR_cff")
+process.ctppsCompositeESSource.periods=[$PERIODS]
 
 # minimal logger settings
 process.MessageLogger = cms.Service("MessageLogger",
