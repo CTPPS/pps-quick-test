@@ -185,7 +185,8 @@ declare -A lists
 lists["reco_std"]="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2018"
 lists["reco_full"]="reco:2016_preTS2,reco:2016_postTS2,reco:2017_preTS2,reco:2017_postTS2,reco:2017E_low_PU,reco:2017H_W_mass,reco:2018,reco:2018A,reco:2018B,reco:2018C,reco:2018D"
 
-lists["dirsim_std"]="dirsim:2016,dirsim:2016_preTS2,dirsim:2016_postTS2,dirsim:2017,dirsim:2017_preTS2,dirsim:2017_postTS2,dirsim:2018,dirsim:2018_preTS1,dirsim:2018_TS1_TS2,dirsim:2018_postTS2"
+lists["dirsim_std"]="dirsim:2016,dirsim:2016_postTS2,dirsim:2017,dirsim:2017_postTS2,dirsim:2018,dirsim:2018_postTS2"
+lists["dirsim_full"]="dirsim:2016,dirsim:2016_preTS2,dirsim:2016_postTS2,dirsim:2017,dirsim:2017_preTS2,dirsim:2017_postTS2,dirsim:2018,dirsim:2018_preTS1,dirsim:2018_TS1_TS2,dirsim:2018_postTS2"
 
 lists["std"]="${lists[reco_std]},${lists[dirsim_std]}"
 
