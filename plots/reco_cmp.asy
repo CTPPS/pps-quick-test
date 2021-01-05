@@ -28,14 +28,14 @@ plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPP
 plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_th_y"); pl_rebin.push(5);
 //plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_t"); pl_rebin.push(2);
 plots.push("n timing-RP tracks"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_n_contrib_timing_tracks"); pl_rebin.push(1);
-plots.push("time"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_time"); pl_rebin.push(2);
+plots.push("time$\ung{ns}$"); pl_sectors.push("45"); pl_paths.push("multiRPPlots/arm0/h_time"); pl_rebin.push(2);
 
 plots.push("$\xi$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_xi"); pl_rebin.push(2);
 plots.push("$\th^*_x\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_x"); pl_rebin.push(5);
 plots.push("$\th^*_y\ung{rad}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_th_y"); pl_rebin.push(5);
 //plots.push("$|t|\ung{GeV^2}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_t"); pl_rebin.push(2);
 plots.push("n timing-RP tracks"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_n_contrib_timing_tracks"); pl_rebin.push(1);
-plots.push("time"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_time"); pl_rebin.push(2);
+plots.push("time$\ung{ns}$"); pl_sectors.push("56"); pl_paths.push("multiRPPlots/arm1/h_time"); pl_rebin.push(2);
 
 xSizeDef = 8cm;
 ySizeDef = 8cm;
