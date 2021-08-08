@@ -14,7 +14,13 @@ function RunOneComparison()
 	echo ""
 	echo "* $period (run $run)"
 
-	./histogram_compare.py -l 0 "$version1/$file" "$version2/$file"
+	local version1_path=$(find $version1 -name $file | head -n 1)
+	local version2_path=$(find $version2 -name $file | head -n 1)
+
+#	echo $version1_path
+#	echo $version2_path
+
+	./histogram_compare.py -l 0 "$version1_path" "$version2_path"
 }
 
 #----------------------------------------------------------------------------------------------------
