@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-from ROOT import TFile, Double
+#!/usr/bin/env python3
+from ROOT import TFile
 import sys
 import getopt
 
