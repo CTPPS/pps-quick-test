@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from ROOT import TFile, Double
+from ROOT import TFile
 import sys
 import getopt
 
