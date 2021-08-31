@@ -21,6 +21,8 @@ periods.push("2018_postTS2");
 
 periods.push("2021");
 
+periods.push("2022");
+
 string plots[], pl_labels[], pl_files[], pl_paths[];
 int pl_rebin[];
 real pl_x_min[], pl_x_max[];
