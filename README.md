@@ -16,5 +16,5 @@
 
  5) Graphical comparison of standard plots:
 	* `cd plots-root`
-    * edit file `make_plots.cc`: in function `make_plots` define the versions (and their line color/style) you wish to plot
-    * run `root -l -q make_plots.cc`
+    * edit file `versions.h`: define the versions (and their line colour/style) you wish to plot
+    * run `root -l -q make_plots.cc`: this produces separate PNG files for "reco" and "dirsim" workflow comparisons

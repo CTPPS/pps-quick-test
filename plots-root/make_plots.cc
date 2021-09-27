@@ -7,17 +7,9 @@
 #include <vector>
 #include <string>
 
+#include "versions.h"
+
 using namespace std;
-
-//----------------------------------------------------------------------------------------------------
-
-struct Version
-{
-	string dir;
-	string label;
-	int color;
-	int style;
-};
 
 //----------------------------------------------------------------------------------------------------
 
@@ -31,9 +23,10 @@ struct Period
 
 struct Plot
 {
+    string file;
 	string path;
-	string label;
-	string sector;
+	string axis_label;
+	string column_label;
 	int rebin;
 };
 
@@ -56,7 +49,7 @@ TH1D* GetHistogram(const string &file, const string &path)
 
 //----------------------------------------------------------------------------------------------------
 
-void MakePlots(const vector<Version> &versions, const vector<Plot> &plots, const vector<Period> &periods, const string &fn)
+void MakePlots(const string &dirPrefix, const vector<Version> &versions, const vector<Plot> &plots, const vector<Period> &periods, const string &fn)
 {
 	TCanvas *c = new TCanvas();
 	c->SetCanvasSize(8000, 3000);
@@ -98,7 +91,7 @@ void MakePlots(const vector<Version> &versions, const vector<Plot> &plots, const
 
 		const auto &pl = plots[pl_idx];
 
-		TLatex *l = new TLatex(0, 0, ("#scale[2]{sector " + pl.sector + ": " + pl.label + "}").c_str());
+		TLatex *l = new TLatex(0, 0, ("#scale[2]{" + pl.column_label + "}").c_str());
 		l->Draw();
 	}
 
@@ -115,7 +108,7 @@ void MakePlots(const vector<Version> &versions, const vector<Plot> &plots, const
 			{
 				const auto &pl = plots[pl_idx];
 
-				TH1D *h = GetHistogram("../" + v.dir + "/reco:" + periods[pe_idx].tag + "/reco_plots.root", pl.path);
+				TH1D *h = GetHistogram("../" + v.dir + "/" + dirPrefix + periods[pe_idx].tag + "/" + pl.file, pl.path);
 				if (!h)
 					continue;
 				
@@ -124,7 +117,7 @@ void MakePlots(const vector<Version> &versions, const vector<Plot> &plots, const
 				h->SetLineStyle(v.style);
 
 				if (first)
-					h->SetTitle((";" + pl.label).c_str());
+					h->SetTitle((";" + pl.axis_label).c_str());
 
 				h->Draw((first) ? "" : "same");
 
@@ -140,22 +133,24 @@ void MakePlots(const vector<Version> &versions, const vector<Plot> &plots, const
 
 //----------------------------------------------------------------------------------------------------
 
-void MakeRecoPlots(const vector<Version> &versions)
+void MakeRecoPlots(const vector<Version> &versions, const string &extension)
 {
+    printf("* MakeRecoPlots\n");
+
 	// define plots (columns)
 	vector<Plot> plots;
 
-	plots.push_back({"multiRPPlots/arm0/h_xi", "#xi", "45", 2});
-	plots.push_back({"multiRPPlots/arm0/h_th_x", "#theta^{*}_{x}   (rad)", "45", 5});
-	plots.push_back({"multiRPPlots/arm0/h_th_y", "#theta^{*}_{y}   (rad)", "45", 5});
-	plots.push_back({"multiRPPlots/arm0/h_n_contrib_timing_tracks", "n timing-RP tracks", "45", 1});
-	plots.push_back({"multiRPPlots/arm0/h_time", "time   (ns)", "45", 2});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm0/h_xi", "#xi", "sector 45: #xi", 2});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm0/h_th_x", "#theta^{*}_{x}   (rad)", "sector 45: #theta^{*}_{x}", 5});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm0/h_th_y", "#theta^{*}_{y}   (rad)", "sector 45: #theta^{*}_{y}", 5});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm0/h_n_contrib_timing_tracks", "n timing-RP tracks", "sector 45: n timing-RP tracks", 1});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm0/h_time", "time   (ns)", "sector 45: time", 2});
 
-	plots.push_back({"multiRPPlots/arm1/h_xi", "#xi", "56", 2});
-	plots.push_back({"multiRPPlots/arm1/h_th_x", "#theta^{*}_{x}   (rad)", "56", 5});
-	plots.push_back({"multiRPPlots/arm1/h_th_y", "#theta^{*}_{y}   (rad)", "56", 5});
-	plots.push_back({"multiRPPlots/arm1/h_n_contrib_timing_tracks", "n timing-RP tracks", "56", 1});
-	plots.push_back({"multiRPPlots/arm1/h_time", "time   (ns)", "56", 2});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm1/h_xi", "#xi", "sector 56: #xi", 2});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm1/h_th_x", "#theta^{*}_{x}   (rad)", "sector 56: #theta^{*}_{x}", 5});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm1/h_th_y", "#theta^{*}_{y}   (rad)", "sector 56: #theta^{*}_{y}", 5});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm1/h_n_contrib_timing_tracks", "n timing-RP tracks", "sector 56: n timing-RP tracks", 1});
+	plots.push_back({"reco_plots.root", "multiRPPlots/arm1/h_time", "time   (ns)", "sector 56: time", 2});
 
 	// define periods (rows)
 	vector<Period> periods;
@@ -176,20 +171,56 @@ void MakeRecoPlots(const vector<Version> &versions)
 	//periods.push_back({"2018D", "run 320822"});
 
 	// make output (plot grid)
-	MakePlots(versions, plots, periods, "reco_cmp.png");
+	MakePlots("reco:", versions, plots, periods, "reco_cmp." + extension);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void MakeDirSimPlots(const vector<Version> &versions, const string &extension)
+{
+    printf("* MakeDirSimPlots\n");
+
+	// define plots (columns)
+	vector<Plot> plots;
+
+	plots.push_back({"lhcInfo.root", "h_xangle", "crossing angle", "crossing angle", 1});
+	plots.push_back({"lhcInfo.root", "h_betaStar", "#beta^*", "beta star", 1});
+
+	plots.push_back({"tracks.root", "RP 3/h_x", "x   (mm)", "RP 3: x", 5});
+	plots.push_back({"tracks.root", "RP 3/h_y", "y   (mm)", "RP 3: y", 5});
+	plots.push_back({"protons.root", "multiRPPlots/arm0/h_xi", "#xi_{multi})", "sector 45: #xi multi", 2});
+
+	plots.push_back({"tracks.root", "RP 103/h_x", "x   (mm)", "RP 103: x", 5});
+	plots.push_back({"tracks.root", "RP 103/h_y", "y   (mm)", "RP 103: y", 5});
+	plots.push_back({"protons.root", "multiRPPlots/arm1/h_xi", "#xi_{multi})", "sector 56: #xi multi", 2});
+
+	// define periods (rows)
+	vector<Period> periods;
+
+	periods.push_back({"2016", ""});
+	periods.push_back({"2016_postTS2", ""});
+
+	periods.push_back({"2017", ""});
+	periods.push_back({"2017_postTS2", ""});
+
+	periods.push_back({"2018", ""});
+	periods.push_back({"2018_postTS2", ""});
+
+	periods.push_back({"2021", ""});
+	periods.push_back({"2022", ""});
+
+	// make output (plot grid)
+	MakePlots("dirsim:", versions, plots, periods, "dirsim_cmp." + extension);
 }
 
 //----------------------------------------------------------------------------------------------------
 
 int make_plots()
 {
-	// define versions
-	vector<Version> versions = {
-		{ "version_base", "base (at TODO)", 4, 1 },
-		{ "version_db", "this PR (at TODO)", 2, 2 },
-	};
+    string extension = "png";
 
-	MakeRecoPlots(versions);
+	MakeRecoPlots(versions, extension);
+	MakeDirSimPlots(versions, extension);
 
 	return 0;
 }
