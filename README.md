@@ -1,3 +1,8 @@
+ 0) Recommended installation place: in your CMSSW working directory, i.e. in
+    * `cd .../CMSSW_X_Y_Z`
+    * `git clone git@github.com:CTPPS/pps-quick-test.git`
+    * `cd pps-quick-test`
+
  1) Before editting CMSSW, build plots:
     * `./run_multiple -o version_0`
 

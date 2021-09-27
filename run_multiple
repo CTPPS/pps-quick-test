@@ -282,7 +282,7 @@ mkdir -p "$output_dir"
 
 # make info file
 (
-	cd ..
+	cd ../src
 	echo "DATE:"
 	date
 
