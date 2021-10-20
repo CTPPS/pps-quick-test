@@ -96,7 +96,7 @@ def UseAlignmentDB(process, connection, tag):
           tag = cms.string(tag)
       ))
   )
-  
+
   process.esPreferDBFileAlignment = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceAlignment")
 
 #----------------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ def UseOpticsFile(process, connection, tag):
       tag = cms.string(tag)
     )),
   )
-  
+
   process.esPreferDBFileOptics = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceOptics")
 
 def UseOpticsDB(process, connection, tag):
@@ -159,6 +159,38 @@ def UseOpticsDB(process, connection, tag):
   process.esPreferDBFileOptics = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceOptics")
 
 #----------------------------------------------------------------------------------------------------
+
+associationCutsDefined = False
+
+def UseAssociationCutsGT(process):
+  global associationCutsDefined
+  associationCutsDefined = True
+
+  if hasattr(process, 'esPreferLocalAssociationCuts'):
+    del process.ppsAssociationCutsESSource
+    del process.esPreferLocalAssociationCuts
+
+def UseAssociationCutsDB(process, connection, tag):
+  global associationCutsDefined
+  associationCutsDefined = True
+
+  if hasattr(process, 'esPreferLocalAssociationCuts'):
+    del process.ppsAssociationCutsESSource
+    del process.esPreferLocalAssociationCuts
+
+  process.CondDBAssociationCuts = CondDB.clone( connect = connection )
+  process.PoolDBESSourceAssociationCuts = cms.ESSource("PoolDBESSource",
+      process.CondDBAssociationCuts,
+      DumpStat = cms.untracked.bool(False),
+      toGet = cms.VPSet(cms.PSet(
+          record = cms.string('PPSAssociationCutsRcd'),
+          tag = cms.string(tag)
+      )),
+  )
+
+  process.esPreferDBFileAssociationCuts = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceAssociationCuts")
+
+#----------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------
 
 def CheckConditions():
@@ -171,3 +203,6 @@ def CheckConditions():
 
   if not opticsDefined:
     raise ValueError("optics not defined")
+
+  if not associationCutsDefined:
+    raise ValueError("association cuts not defined")
