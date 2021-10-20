@@ -9,24 +9,29 @@ from conditions import *
 def SetConditions(process):
   # chose GT
   process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+  # TODO: update to 12_1_X
   process.GlobalTag = GlobalTag(process.GlobalTag, "112X_dataRun2_v6")
 
-  # chose LHCInfo
+  # chose LHCInfo source
   UseLHCInfoGT(process)
   #UseLHCInfoLocal(process)
   #UseLHCInfoDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "LHCInfoEndFill_prompt_v2")
 
-  # chose alignment
+  # chose alignment source
   UseAlignmentGT(process)
   #UseAlignmentLocal(process)
   #UseAlignmentFile(process, "sqlite_file:/afs/cern.ch/user/c/cmora/public/CTPPSDB/AlignmentSQlite/CTPPSRPRealAlignment_v13Jun19_v1.db", "PPSRPRealAlignment_v13Jun19")
   #UseAlignmentDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "CTPPSRPAlignment_real_offline_v7")
 
-  # chose optics
+  # chose optics source
   UseOpticsGT(process)
   #UseOpticsLocal(process)
   #UseOpticsFile(process, "sqlite_file:/afs/cern.ch/user/w/wcarvalh/public/CTPPS/optical_functions/PPSOpticalFunctions_2016-2018_v9.db", "PPSOpticalFunctions_test")
   #UseOpticsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSOpticalFunctions_offline_v6")
+
+  # chose association cuts source
+  #UseAssociationCutsGT(process)
+  UseAssociationCutsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSAssociationCuts_test")
 
 # minimum of logs
 process.MessageLogger = cms.Service("MessageLogger",
