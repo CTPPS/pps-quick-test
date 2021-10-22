@@ -9,7 +9,8 @@ from conditions import *
 def SetConditions(process):
   # chose GT
   process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-  process.GlobalTag = GlobalTag(process.GlobalTag, "121X_dataRun2_v5")
+  #process.GlobalTag = GlobalTag(process.GlobalTag, "121X_dataRun2_v5")
+  process.GlobalTag = GlobalTag(process.GlobalTag, "121X_dataRun3_Candidate_2021_10_21_12_37_53")
 
   # chose LHCInfo source
   UseLHCInfoGT(process)
@@ -29,8 +30,8 @@ def SetConditions(process):
   #UseOpticsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSOpticalFunctions_offline_v6")
 
   # chose association cuts source
-  #UseAssociationCutsGT(process)
-  UseAssociationCutsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSAssociationCuts_test")
+  UseAssociationCutsGT(process)
+  #UseAssociationCutsDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "PPSAssociationCuts_test")
 
 # minimum of logs
 process.MessageLogger = cms.Service("MessageLogger",
