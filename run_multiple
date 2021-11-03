@@ -292,7 +292,7 @@ mkdir -p "$output_dir"
 
 	echo ""
 	echo "STATUS:"
-	git st
+	git status
 	cd - &> /dev/null
 ) > "$output_dir/info"
 
