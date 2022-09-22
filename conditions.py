@@ -31,7 +31,7 @@ def UseLHCInfoFile(process, connection, tag):
   process.ctppsProtons.lhcInfoLabel = ""
   
   process.CondDBALHCInfo = CondDB.clone( connect = connection )
-  process.PoolDBESSource = cms.ESSource("PoolDBESSource",
+  process.PoolDBESSourceLHCInfo = cms.ESSource("PoolDBESSource",
     process.CondDBALHCInfo,
     DumpStat = cms.untracked.bool(False),
     toGet = cms.VPSet(cms.PSet(
@@ -39,6 +39,9 @@ def UseLHCInfoFile(process, connection, tag):
       tag = cms.string(tag)
     )),
   )
+
+  process.esPreferDBFileLHCInfo = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceLHCInfo")
+
 
 def UseLHCInfoPerLSFile(process, connection, tag):
   global lHCInfoPerLSDefined
@@ -51,7 +54,7 @@ def UseLHCInfoPerLSFile(process, connection, tag):
   process.ctppsProtons.lhcInfoPerLSLabel = ""
   
   process.CondDBALHCInfoPerLS = CondDB.clone( connect = connection )
-  process.PoolDBESSource = cms.ESSource("PoolDBESSource",
+  process.PoolDBESSourceLHCInfoPerLS = cms.ESSource("PoolDBESSource",
     process.CondDBALHCInfoPerLS,
     DumpStat = cms.untracked.bool(False),
     toGet = cms.VPSet(cms.PSet(
@@ -59,6 +62,8 @@ def UseLHCInfoPerLSFile(process, connection, tag):
       tag = cms.string(tag)
     )),
   )
+
+  process.esPreferDBFileLHCInfoPerLS = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceLHCInfoPerLS")
 
 def UseLHCInfoPerFillFile(process, connection, tag):
   global lHCInfoPerFillDefined
@@ -71,7 +76,7 @@ def UseLHCInfoPerFillFile(process, connection, tag):
   process.ctppsProtons.lhcInfoPerFillLabel = ""
   
   process.CondDBALHCInfoPerFill = CondDB.clone( connect = connection )
-  process.PoolDBESSource = cms.ESSource("PoolDBESSource",
+  process.PoolDBESSourceLHCInfoPerFill = cms.ESSource("PoolDBESSource",
     process.CondDBALHCInfoPerFill,
     DumpStat = cms.untracked.bool(False),
     toGet = cms.VPSet(cms.PSet(
@@ -79,6 +84,8 @@ def UseLHCInfoPerFillFile(process, connection, tag):
       tag = cms.string(tag)
     )),
   )
+
+  process.esPreferDBFileLHCInfoPerFill = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceLHCInfoPerFill")
 
 #----------------------------------------------------------------------------------------------------
 
