@@ -24,21 +24,68 @@ def UseLHCInfoFile(process, connection, tag):
   global lhcInfoDefined
   lhcInfoDefined = True
 
-  del process.ctppsRPLHCInfoCorrectionsDataESSourceXML
-  del process.esPreferLocalLHCInfo
+  # del process.ctppsRPLHCInfoCorrectionsDataESSourceXML
+  # del process.esPreferLocalLHCInfo
 
   process.ctppsInterpolatedOpticalFunctionsESSource.lhcInfoLabel = ""
   process.ctppsProtons.lhcInfoLabel = ""
   
   process.CondDBALHCInfo = CondDB.clone( connect = connection )
-  process.PoolDBESSource = cms.ESSource("PoolDBESSource",
-    CondDBLHCInfo,
+  process.PoolDBESSourceLHCInfo = cms.ESSource("PoolDBESSource",
+    process.CondDBALHCInfo,
     DumpStat = cms.untracked.bool(False),
     toGet = cms.VPSet(cms.PSet(
       record = cms.string('LHCInfoRcd'),
       tag = cms.string(tag)
     )),
   )
+
+  process.esPreferDBFileLHCInfo = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceLHCInfo")
+
+
+def UseLHCInfoPerLSFile(process, connection, tag):
+  global lHCInfoPerLSDefined
+  lHCInfoPerLSDefined = True
+
+  # del process.ctppsRPLHCInfoPerLSCorrectionsDataESSourceXML
+  # del process.esPreferLocalLHCInfoPerLS
+
+  # process.ctppsInterpolatedOpticalFunctionsESSource.lHCInfoPerLSLabel = ""
+  process.ctppsProtons.lhcInfoPerLSLabel = ""
+  
+  process.CondDBALHCInfoPerLS = CondDB.clone( connect = connection )
+  process.PoolDBESSourceLHCInfoPerLS = cms.ESSource("PoolDBESSource",
+    process.CondDBALHCInfoPerLS,
+    DumpStat = cms.untracked.bool(False),
+    toGet = cms.VPSet(cms.PSet(
+      record = cms.string('LHCInfoPerLSRcd'),
+      tag = cms.string(tag)
+    )),
+  )
+
+  process.esPreferDBFileLHCInfoPerLS = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceLHCInfoPerLS")
+
+def UseLHCInfoPerFillFile(process, connection, tag):
+  global lHCInfoPerFillDefined
+  lHCInfoPerFillDefined = True
+
+  # del process.ctppsRPLHCInfoPerFillCorrectionsDataESSourceXML
+  # del process.esPreferLocalLHCInfoPerFill
+
+  # process.ctppsInterpolatedOpticalFunctionsESSource.lHCInfoPerFillLabel = ""
+  process.ctppsProtons.lhcInfoPerFillLabel = ""
+  
+  process.CondDBALHCInfoPerFill = CondDB.clone( connect = connection )
+  process.PoolDBESSourceLHCInfoPerFill = cms.ESSource("PoolDBESSource",
+    process.CondDBALHCInfoPerFill,
+    DumpStat = cms.untracked.bool(False),
+    toGet = cms.VPSet(cms.PSet(
+      record = cms.string('LHCInfoPerFillRcd'),
+      tag = cms.string(tag)
+    )),
+  )
+
+  process.esPreferDBFileLHCInfoPerFill = cms.ESPrefer("PoolDBESSource", "PoolDBESSourceLHCInfoPerFill")
 
 #----------------------------------------------------------------------------------------------------
 

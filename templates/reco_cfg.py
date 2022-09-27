@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
-process = cms.Process('TEST', eras.Run2_$year)
+process = cms.Process('TEST', eras.Run3)
 #process = cms.Process('TEST', eras.Run2_$year, eras.run2_miniAOD_devel)
 
 from conditions import *
@@ -12,9 +12,11 @@ def SetConditions(process):
   process.GlobalTag = GlobalTag(process.GlobalTag, "auto:run3_data")
 
   # chose LHCInfo source
-  UseLHCInfoGT(process)
+  # UseLHCInfoGT(process)
   #UseLHCInfoLocal(process)
-  #UseLHCInfoDB(process, "frontier://FrontierProd/CMS_CONDITIONS", "LHCInfoEndFill_prompt_v2")
+  UseLHCInfoFile(process, "sqlite_file:/eos/home-j/jchyczyn/new/CMSSW_12_5_0_pre3/src/CondTools/RunInfo/python/lhcinfo_pop_test.db", "LHCInfo_end_1")
+  UseLHCInfoPerFillFile(process, "sqlite_file:/eos/home-j/jchyczyn/new/CMSSW_12_5_0_pre3/src/CondTools/RunInfo/python/lhcinfo_pop_test.db", "LHCInfoPerFill_end_1")
+  UseLHCInfoPerLSFile(process, "sqlite_file:/eos/home-j/jchyczyn/new/CMSSW_12_5_0_pre3/src/CondTools/RunInfo/python/lhcinfo_pop_test.db", "LHCInfoPerLS_end_1")
 
   # chose alignment source
   UseAlignmentGT(process)
